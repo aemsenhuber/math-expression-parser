@@ -1,0 +1,4 @@
+build/
+dist/
+maexpa/__pycache__/
+maexpa.egg-info/
