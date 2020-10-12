@@ -68,7 +68,7 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Mixed integer/float addition and substractions", expr = expr ):
 				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
-				self.assertEqual( res, comp )
+				self.assertAlmostEqual( res, comp )
 
 	def test_mult_int( self ):
 		tests = [
@@ -100,7 +100,7 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Floating-point multiplication", expr = expr ):
 				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
-				self.assertEqual( res, comp )
+				self.assertAlmostEqual( res, comp )
 
 	def test_div_int( self ):
 		tests = [
@@ -132,7 +132,22 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Integer division resulting in float", expr = expr ):
 				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
-				self.assertEqual( res, comp )
+				self.assertAlmostEqual( res, comp )
+
+	def test_div_float( self ):
+		tests = [
+			( "-1.5/1", -1.5 ),
+			( "1/0.5", 2. ),
+			( "10.//20", 0. ),
+			( "3/4*5", 3.75 ),
+			( "6.7*10//10", 6. ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Floating-point division", expr = expr ):
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), float )
+				self.assertAlmostEqual( res, comp )
 
 	def test_exp_int( self ):
 		tests = [
@@ -150,7 +165,7 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Integer exponentiation", expr = expr ):
 				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), int )
-				self.assertEqual( res, comp )
+				self.assertAlmostEqual( res, comp )
 
 	def test_exp_float( self ):
 		tests = [
@@ -163,7 +178,69 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Floating-point exponentiation", expr = expr ):
 				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
+				self.assertAlmostEqual( res, comp )
+
+	def test_prec_int( self ):
+		tests = [
+			( "3*5+1", 16 ),
+			( "-2+3//3", -1 ),
+			( "1+3*2**2", 13 ),
+			( "3*3**2", 27 ),
+			( "-4+4**2", 12 ),
+			( "4-4**2", -12 ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Operator precendence with integer expressions", expr = expr ):
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), int )
 				self.assertEqual( res, comp )
+
+	def test_prec_float( self ):
+		tests = [
+			( "1.5+6*3", 19.5 ),
+			( "-7-5*1.2", -13. ),
+			( "1.5+3.5*2.0**2", 15.5 ),
+			( "3+9/3", 6. ),
+			( "1.5+6//3", 3.5 ),
+			( "-9+8*0.75", -3. ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Operator precendence with floating-point expressions", expr = expr ):
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), float )
+				self.assertAlmostEqual( res, comp )
+
+	def test_par_int( self ):
+		tests = [
+			( "3*(5+1)", 18 ),
+			( "6*(7-7)", 0 ),
+			( "5*(10-15)", -25 ),
+			( "(3*3)**2", 81 ),
+			( "(-4*4)**2", 256 ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Integer expressions with parentheses", expr = expr ):
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), int )
+				self.assertEqual( res, comp )
+
+	def test_par_float( self ):
+		tests = [
+			( "3*(5+3.5)", 25.5 ),
+			( "6*(7.2-7)", 1.2 ),
+			( "5.*(10-15)", -25. ),
+			( "(2.5*2.5)**2", 39.0625 ),
+			( "(-4*1.5)**2", 36. ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Floating-point expressions with parentheses", expr = expr ):
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), float )
+				self.assertAlmostEqual( res, comp )
 
 	def test_no_var( self ):
 		for text in [ "1+e", "0*int", "float**2", "nan*45.", "inf/1000", "none(no)" ]:
@@ -201,7 +278,7 @@ class MaExPaTestCase( unittest.TestCase ):
 			with self.subTest( "Constants as variables", expr = expr ):
 				res = maexpa.Expression( expr )( var = consts )
 				self.assertIs( type( res ), float )
-				self.assertEqual( res, comp )
+				self.assertAlmostEqual( res, comp )
 
 if __name__ == '__main__':
 	unittest.main()
