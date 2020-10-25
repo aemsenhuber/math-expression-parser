@@ -124,6 +124,12 @@ class StdTestCase( unittest.TestCase ):
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
+	def test_func_args_num( self ):
+		for text in [ "min(1)", "ceil(1,2)", "sqrt(9,16)" ]:
+			with self.subTest( "Passing incorrect number of arguments", text = text ):
+				with self.assertRaises( maexpa.exception.FuncArgsNumException ):
+					maexpa.Expression( text )( var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+
 	def test_func_no_var( self ):
 		for text in [ "e(1)", "pi(1)", "tau(1)" ]:
 			with self.subTest( "Using variables as functions", text = text ):

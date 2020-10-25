@@ -51,7 +51,7 @@ def func( name, args ):
 		raise exception.NoFuncException( name, -1 )
 
 	if len( args ) != _func_defs[ name ][ "args" ]:
-		raise exception.NoFuncException( name, -1 )
+		raise exception.FuncArgsNumException( name, -1, _func_defs[ name ][ "args" ], len( args ) )
 
 	return _func_defs[ name ][ "func" ]( *args )
 

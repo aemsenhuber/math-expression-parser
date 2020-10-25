@@ -41,3 +41,12 @@ class NoVarException( CommonException ):
 class NoFuncException( CommonException ):
 	def __str__( self ):
 		return "Runtime Error: function `{:s}' does not exist".format( self.desc )
+
+class FuncArgsNumException( CommonException ):
+	def __init__( self, desc, column, expected, actual ):
+		CommonException.__init__( self, desc, column )
+		self.expected = expected
+		self.actual = actual
+
+	def __str__( self ):
+		return "Runtime Error: function `{:s}' expects {:d} arguments; got {:d} instead".format( self.desc, self.expected, self.actual )
