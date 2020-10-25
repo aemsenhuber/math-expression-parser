@@ -14,7 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
 import unittest
 import maexpa
 import maexpa.exception
@@ -256,18 +255,12 @@ class MaExPaTestCase( unittest.TestCase ):
 
 	def test_vars( self ):
 		def consts( name ):
-			if name == "e":
-				return math.e
-			elif name == "pi":
-				return math.pi
-			elif name == "ten":
+			if name == "ten":
 				return 10.
 			else:
 				raise maexpa.exception.NoVarException( name, 99 )
 
 		tests = [
-			( "e", math.e ),
-			( "2*pi", 2. * math.pi ),
 			( "ten", 10. ),
 			( "ten*ten", 100. ),
 			( "ten**2", 100. ),

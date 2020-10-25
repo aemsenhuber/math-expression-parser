@@ -37,6 +37,19 @@ print( expr( var = vars_callback ) )
 
 which will show `[10. 20. 30.]`.
 
+## Standard constants and functions
+
+The library provides callbacks for a standard set of functions and constants in the `maexpa.callback_std` module. An example using the two callbacks is:
+
+```
+import maexpa
+import maexpa.callback_std
+
+expr = maexpa.Expression( "pow(2*pi,2)" )
+
+print( expr( var = maexpa.callback_std.var, func = maexpa.callback_std.func ) )
+```
+
 ## License
 
 The library is licensed under version 2.0 of the Apache License, see the `LICENSE` file for the full terms and conditions.

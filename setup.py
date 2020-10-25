@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name = "maexpa",
-    version = "0.1",
+    version = "0.2",
     author = "Alexandre Emsenhuber",
     author_email = "emsenhuber@lpl.arizona.edu",
     description = "Extensible mathematical expression analyzer with callbacks for variables and functions",
