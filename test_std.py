@@ -19,7 +19,6 @@ import math
 import unittest
 
 import maexpa
-import maexpa.exception
 import maexpa.callback_std
 
 class StdTestCase( unittest.TestCase ):

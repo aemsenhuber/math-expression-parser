@@ -35,16 +35,22 @@ class ParseEndException( CommonException ):
 		return "Parse Error: unexpected end"
 
 class NoVarException( CommonException ):
+	def __init__( self, desc ):
+		CommonException.__init__( self, desc, None )
+
 	def __str__( self ):
 		return "Runtime Error: variable `{:s}' does not exist".format( self.desc )
 
 class NoFuncException( CommonException ):
+	def __init__( self, desc ):
+		CommonException.__init__( self, desc, None )
+
 	def __str__( self ):
 		return "Runtime Error: function `{:s}' does not exist".format( self.desc )
 
 class FuncArgsNumException( CommonException ):
-	def __init__( self, desc, column, expected, actual ):
-		CommonException.__init__( self, desc, column )
+	def __init__( self, desc, expected, actual ):
+		CommonException.__init__( self, desc, None )
 		self.expected = expected
 		self.actual = actual
 

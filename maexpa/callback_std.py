@@ -48,10 +48,10 @@ def func( name, args ):
 	'''
 
 	if not name in _func_defs:
-		raise exception.NoFuncException( name, -1 )
+		raise exception.NoFuncException( name )
 
 	if len( args ) != _func_defs[ name ][ "args" ]:
-		raise exception.FuncArgsNumException( name, -1, _func_defs[ name ][ "args" ], len( args ) )
+		raise exception.FuncArgsNumException( name, _func_defs[ name ][ "args" ], len( args ) )
 
 	return _func_defs[ name ][ "func" ]( *args )
 
@@ -61,6 +61,6 @@ def var( name ):
 	'''
 
 	if not name in _var_defs:
-		raise exception.NoVarException( name, -1 )
+		raise exception.NoVarException( name )
 
 	return _var_defs[ name ]

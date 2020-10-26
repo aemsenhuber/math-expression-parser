@@ -20,8 +20,8 @@ class Expression( object ):
 	def __init__( self, expr, var = None, func = None ):
 		self.expr = expr
 		self.tokens = tokens.lexer( expr )
-		self.var_cb = var
-		self.func_cb = func
+		self.var_cbs = [] if var is None else [ var ]
+		self.func_cbs = [] if func is None else [ func ]
 		self.cur = None
 		self.value = None
 
@@ -64,19 +64,17 @@ class Expression( object ):
 		self.value = None
 
 		if not var is None:
-			var_save = self.var_cb
-			self.var_cb = var
+			self.var_cbs.insert( 0, var )
 		if not func is None:
-			func_save = self.func_cb
-			self.func_cb = func
+			self.func_cbs.insert( 0, func )
 
 		try:
 			value = self.expression()
 		finally:
 			if not var is None:
-				self.var_cb = var_save
+				self.var_cbs.pop( 0 )
 			if not func is None:
-				self.func_cb = func_save
+				self.func_cbs.pop( 0 )
 
 		if self.cur != len( self.tokens ):
 			self.error()
@@ -143,13 +141,19 @@ class Expression( object ):
 		self.error()
 
 	def function( self, name, args ):
-		if self.func_cb is None:
-			raise exception.NoFuncException( name, -1 )
+		for cb in self.func_cbs:
+			try:
+				return cb( name, args )
+			except exception.NoFuncException:
+				continue
 
-		return self.func_cb( name, args )
+		raise exception.NoFuncException( name )
 
 	def variable( self, name ):
-		if self.var_cb is None:
-			raise exception.NoVarException( name, -1 )
+		for cb in self.var_cbs:
+			try:
+				return cb( name )
+			except exception.NoVarException:
+				continue
 
-		return self.var_cb( name )
+		raise exception.NoVarException( name )

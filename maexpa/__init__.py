@@ -15,3 +15,4 @@
 # limitations under the License.
 
 from .expression import Expression
+from . import exception

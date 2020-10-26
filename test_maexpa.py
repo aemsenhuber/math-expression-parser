@@ -16,7 +16,6 @@
 
 import unittest
 import maexpa
-import maexpa.exception
 
 class MaExPaTestCase( unittest.TestCase ):
 	def test_int( self ):
@@ -258,7 +257,7 @@ class MaExPaTestCase( unittest.TestCase ):
 			if name == "ten":
 				return 10.
 			else:
-				raise maexpa.exception.NoVarException( name, 99 )
+				raise maexpa.exception.NoVarException( name )
 
 		tests = [
 			( "ten", 10. ),
@@ -272,6 +271,45 @@ class MaExPaTestCase( unittest.TestCase ):
 				res = maexpa.Expression( expr )( var = consts )
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
+
+	def test_vars_chain( self ):
+		def consts_base( name ):
+			if name == "b":
+				return 10.
+			elif name == "c":
+				return 8.
+			else:
+				raise maexpa.exception.NoVarException( name )
+
+		def consts_first( name ):
+			if name == "a":
+				return 3.
+			elif name == "c":
+				return 7.
+			else:
+				raise maexpa.exception.NoVarException( name )
+
+		def consts_second( name ):
+			if name == "a":
+				return 5.
+			else:
+				raise maexpa.exception.NoVarException( name )
+
+		tests = [
+			( "a", 3., 5. ),
+			( "b", 10., 10. ),
+			( "c", 7., 8. ),
+		]
+
+		for expr, comp_first, comp_second in tests:
+			with self.subTest( "Constants as variables", expr = expr ):
+				obj = maexpa.Expression( expr, var = consts_base )
+				res_first = obj( var = consts_first )
+				self.assertIs( type( res_first ), float )
+				self.assertAlmostEqual( res_first, comp_first )
+				res_second = obj( var = consts_second )
+				self.assertIs( type( res_second ), float )
+				self.assertAlmostEqual( res_second, comp_second )
 
 if __name__ == '__main__':
 	unittest.main()

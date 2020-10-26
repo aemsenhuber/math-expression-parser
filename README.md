@@ -1,4 +1,4 @@
-**MaExPa** (__Ma__thematical __Ex__pression __Pa__rser) is library providing a simple algebraic expression analyser, with callbacks for variable replacement and function calls, and support for implicit support of NumPy arrays.
+**MaExPa** (<u>Ma</u>thematical <u>Ex</u>pression <u>Pa</u>rser) is library providing a simple algebraic expression analyser, with callbacks for variable replacement and function calls, and support for implicit support of NumPy arrays.
 
 ## Aims
 
@@ -15,7 +15,13 @@ expr = maexpa.Expression( "3*5" )
 print( expr() )
 ```
 
-A more complicated use case with a replacement for variables is:
+### Variable and function replacement
+
+Callbacks for variable and function replacements can be passed when building a `maexpa.Expression` object and when computing the result:
+* A callback for replacement of variables can be provided with the `var` keyword argument. That function receives a single argument, the name of the variable to replace and should return the value of the variable. In case the callback does not recognize the variable, it should raise a `maexpa.exception.NoVarException` instance.
+* A callback replacement of function calls can be provided with the `func` keyword argument. That function receives two arguments, the first being the name of the function and the second a list of the arguments. It should return the result of the function. In case the callback does not recognize the variable, it should raise a `maexpa.exception.NoFuncException` instance, and a `maexpa.exception.FuncArgsNumException` instance if the user provided an incorrect number of arguments.
+
+An use case with replacement for variables is:
 
 ```
 import numpy
@@ -30,14 +36,14 @@ def vars_callback( name ):
 	if name == "total":
 		return numpy.asarray( [ 10., 10., 10. ] )
 
-	raise Exception( "Unknown variable {:s}".format( name ) )
+	raise maexpa.exception.NoVarException( name )
 
 print( expr( var = vars_callback ) )
 ```
 
 which will show `[10. 20. 30.]`.
 
-## Standard constants and functions
+### Standard constants and functions
 
 The library provides callbacks for a standard set of functions and constants in the `maexpa.callback_std` module. An example using the two callbacks is:
 
@@ -45,9 +51,9 @@ The library provides callbacks for a standard set of functions and constants in 
 import maexpa
 import maexpa.callback_std
 
-expr = maexpa.Expression( "pow(2*pi,2)" )
+expr = maexpa.Expression( "pow(2*pi,2)", var = maexpa.callback_std.var, func = maexpa.callback_std.func )
 
-print( expr( var = maexpa.callback_std.var, func = maexpa.callback_std.func ) )
+print( expr() )
 ```
 
 ## License
