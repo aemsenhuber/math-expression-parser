@@ -18,6 +18,9 @@ import unittest
 import maexpa
 
 class MaExPaTestCase( unittest.TestCase ):
+	def setUp( self ):
+		maexpa.lib( None )
+
 	def test_int( self ):
 		for text in [ "0", "1000000", "-111111111111", "+8946654", "0777" ]:
 			with self.subTest( "Integer conversion", text = text ):

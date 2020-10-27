@@ -1,4 +1,4 @@
-# Mathematical functions and variables for MaExPa (standard library version).
+# Mathematical functions and variables for MaExPa (NumPy version).
 #
 # Copyright 2020 Alexandre Emsenhuber
 #
@@ -17,25 +17,24 @@
 from . import exception
 
 import math
+import numpy
 
 _func_defs = {
-	# Built-in module
-	"min": { "func": min, "args": 2 },
-	"max": { "func": max, "args": 2 },
-	"pow": { "func": pow, "args": 2 },
+	"min": { "func": numpy.minimum, "args": 2 },
+	"max": { "func": numpy.maximum, "args": 2 },
+	"pow": { "func": numpy.power, "args": 2 },
 
-	# math module
-	"abs": { "func": math.fabs, "args": 1 },
-	"floor": { "func": math.floor, "args": 1 },
-	"ceil": { "func": math.ceil, "args": 1 },
+	"abs": { "func": numpy.fabs, "args": 1 },
+	"floor": { "func": numpy.floor, "args": 1 },
+	"ceil": { "func": numpy.ceil, "args": 1 },
 
-	"exp": { "func": math.exp, "args": 1 },
-	"log": { "func": math.log, "args": 1 },
-	"log2": { "func": math.log2, "args": 1 },
-	"log10": { "func": math.log10, "args": 1 },
+	"exp": { "func": numpy.exp, "args": 1 },
+	"log": { "func": numpy.log, "args": 1 },
+	"log2": { "func": numpy.log2, "args": 1 },
+	"log10": { "func": numpy.log10, "args": 1 },
 
-	"sqrt": { "func": math.sqrt, "args": 1 },
-	"cbrt": { "func": lambda x: math.copysign( math.fabs( x ) ** ( 1. / 3. ), x ), "args": 1 },
+	"sqrt": { "func": numpy.sqrt, "args": 1 },
+	"cbrt": { "func": numpy.cbrt, "args": 1 },
 }
 
 _var_defs = {

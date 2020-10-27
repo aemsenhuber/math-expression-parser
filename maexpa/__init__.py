@@ -15,4 +15,6 @@
 # limitations under the License.
 
 from .expression import Expression
-from . import exception
+from . import selection, exception
+
+lib = selection.Selection()

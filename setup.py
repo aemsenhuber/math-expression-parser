@@ -8,7 +8,7 @@ setuptools.setup(
     description = "Extensible mathematical expression analyzer with callbacks for variables and functions",
     long_description = open( "README.md", "r" ).read(),
     long_description_content_type = "text/markdown",
-    url = "https://github.com/aemsenhuber/maexpa",
+    url = "https://github.com/aemsenhuber/math-expression-parser",
     packages = setuptools.find_packages(),
     classifiers = [
         "Programming Language :: Python :: 3",

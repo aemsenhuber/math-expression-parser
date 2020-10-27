@@ -1,4 +1,4 @@
-**MaExPa** (<u>Ma</u>thematical <u>Ex</u>pression <u>Pa</u>rser) is library providing a simple algebraic expression analyser, with callbacks for variable replacement and function calls, and support for implicit support of NumPy arrays.
+**MaExPa** (**Ma**thematical **Ex**pression **Pa**rser) is library providing a simple algebraic expression analyser, with callbacks for variable replacement and function calls, and support of NumPy arrays.
 
 ## Aims
 
@@ -8,7 +8,7 @@ The goal of this library is to provide an easy way to do custom calculations on 
 
 MaExPa provides on main class, `maexpa.Expression` that compiles and executes user-provided mathematical expressions. A very simple use is this:
 
-```
+```python
 import maexpa
 
 expr = maexpa.Expression( "3*5" )
@@ -23,7 +23,7 @@ Callbacks for variable and function replacements can be passed when building a `
 
 An use case with replacement for variables is:
 
-```
+```python
 import numpy
 import maexpa
 
@@ -45,13 +45,14 @@ which will show `[10. 20. 30.]`.
 
 ### Standard constants and functions
 
-The library provides callbacks for a standard set of functions and constants in the `maexpa.callback_std` module. An example using the two callbacks is:
+The library provides callbacks for common mathematical functions and constants. Two implementations exist: one using Python's standard library and one using `numpy`. By default neither is enabled; to use either variant, `maxepa.lib` must be called with an argument specifying which version shall be activated: "std" for Python's standard library and "numpy" for NumPy. The following is an example using the former variant:
 
-```
+```python
 import maexpa
-import maexpa.callback_std
 
-expr = maexpa.Expression( "pow(2*pi,2)", var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+maexpa.lib( "std" )
+
+expr = maexpa.Expression( "pow(2*pi,2)" )
 
 print( expr() )
 ```

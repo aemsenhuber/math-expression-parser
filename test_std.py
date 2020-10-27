@@ -19,9 +19,11 @@ import math
 import unittest
 
 import maexpa
-import maexpa.callback_std
 
 class StdTestCase( unittest.TestCase ):
+	def setUp( self ):
+		maexpa.lib( "std" )
+
 	def test_var( self ):
 		tests = [
 			( "e", math.e ),
@@ -31,7 +33,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Constants", expr = expr ):
-				res = maexpa.Expression( expr )( var = maexpa.callback_std.var )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
@@ -39,7 +41,7 @@ class StdTestCase( unittest.TestCase ):
 		for text in [ "xi", "lambda", "a" ]:
 			with self.subTest( "Undefined constants", text = text ):
 				with self.assertRaises( maexpa.exception.NoVarException ):
-					maexpa.Expression( text )( var = maexpa.callback_std.var )
+					maexpa.Expression( text )()
 
 	def test_func_builtin_int( self ):
 		tests = [
@@ -53,7 +55,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Builting functions on integers", expr = expr ):
-				res = maexpa.Expression( expr )( func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), int )
 				self.assertEqual( res, comp )
 
@@ -66,7 +68,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Builting functions on floats", expr = expr ):
-				res = maexpa.Expression( expr )( func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
@@ -80,7 +82,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Conversion from float to integer", expr = expr ):
-				res = maexpa.Expression( expr )( func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), int )
 				self.assertEqual( res, comp )
 
@@ -92,7 +94,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Absoltue value on float", expr = expr ):
-				res = maexpa.Expression( expr )( func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
@@ -106,7 +108,7 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Exponential and logarithms on float", expr = expr ):
-				res = maexpa.Expression( expr )( var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
@@ -119,7 +121,20 @@ class StdTestCase( unittest.TestCase ):
 
 		for expr, comp in tests:
 			with self.subTest( "Square root", expr = expr ):
-				res = maexpa.Expression( expr )( var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+				res = maexpa.Expression( expr )()
+				self.assertIs( type( res ), float )
+				self.assertAlmostEqual( res, comp )
+
+	def test_func_cbrt( self ):
+		tests = [
+			( "cbrt(8.)", 2. ),
+			( "cbrt(-7)", -7**( 1. / 3. ) ),
+			( "cbrt(45**3)", 45. ),
+		]
+
+		for expr, comp in tests:
+			with self.subTest( "Cube root", expr = expr ):
+				res = maexpa.Expression( expr )()
 				self.assertIs( type( res ), float )
 				self.assertAlmostEqual( res, comp )
 
@@ -127,13 +142,13 @@ class StdTestCase( unittest.TestCase ):
 		for text in [ "min(1)", "ceil(1,2)", "sqrt(9,16)" ]:
 			with self.subTest( "Passing incorrect number of arguments", text = text ):
 				with self.assertRaises( maexpa.exception.FuncArgsNumException ):
-					maexpa.Expression( text )( var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+					maexpa.Expression( text )()
 
 	def test_func_no_var( self ):
 		for text in [ "e(1)", "pi(1)", "tau(1)" ]:
 			with self.subTest( "Using variables as functions", text = text ):
 				with self.assertRaises( maexpa.exception.NoFuncException ):
-					maexpa.Expression( text )( var = maexpa.callback_std.var, func = maexpa.callback_std.func )
+					maexpa.Expression( text )()
 
 if __name__ == '__main__':
 	unittest.main()

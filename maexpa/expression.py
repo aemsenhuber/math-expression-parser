@@ -20,8 +20,24 @@ class Expression( object ):
 	def __init__( self, expr, var = None, func = None ):
 		self.expr = expr
 		self.tokens = tokens.lexer( expr )
-		self.var_cbs = [] if var is None else [ var ]
-		self.func_cbs = [] if func is None else [ func ]
+
+		# This has to be imported as run time to prevent circular reference
+		from . import lib
+
+		self.var_cbs = []
+		lib_var_cb = lib.get_var_cb()
+		if not lib_var_cb is None:
+			self.var_cbs.append( lib_var_cb )
+		if not var is None:
+			self.var_cbs.append( var )
+
+		self.func_cbs = []
+		lib_func_cb = lib.get_func_cb()
+		if not lib_func_cb is None:
+			self.func_cbs.append( lib_func_cb )
+		if not func is None:
+			self.func_cbs.append( func )
+
 		self.cur = None
 		self.value = None
 
